@@ -1,14 +1,17 @@
 {
     "name": "kelunik/oauth",
     "type": "library",
-    "require": {
-        "amphp/artax": "^3"
-    },
     "license": "MIT",
     "authors": [
         {
             "name": "Niklas Keller",
             "email": "me@kelunik.com"
         }
-    ]
+    ],
+    "require": {
+        "amphp/artax": "^3"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.3"
+    }
 }
