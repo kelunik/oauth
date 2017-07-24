@@ -8,6 +8,11 @@
             "email": "me@kelunik.com"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "Kelunik\\OAuth\\": "src"
+        }
+    },
     "require": {
         "amphp/artax": "^3"
     },
