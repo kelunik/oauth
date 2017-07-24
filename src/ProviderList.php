@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Kelunik\OAuth;
 
 use Error;

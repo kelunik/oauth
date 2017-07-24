@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Kelunik\OAuth;
 
 use Amp\Artax\Client;
@@ -75,9 +74,9 @@ abstract class Provider {
         });
     }
 
-    public abstract function getIdentity(string $accessToken): Promise;
+    abstract public function getIdentity(string $accessToken): Promise;
 
-    public abstract function getInternalName(): string;
+    abstract public function getInternalName(): string;
 
-    public abstract function getName(): string;
+    abstract public function getName(): string;
 }
