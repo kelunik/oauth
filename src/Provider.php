@@ -62,7 +62,7 @@ abstract class Provider {
 
             /** @var HttpResponse $response */
             $response = yield $this->http->request($request);
-            $body = $response->getBody();
+            $body = yield $response->getBody();
 
             parse_str($body, $data);
 

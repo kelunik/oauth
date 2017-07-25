@@ -38,7 +38,7 @@ class StackExchange extends Provider {
                 throw new HttpException("Stack Exchange API query failure (" . $response->getStatus() . ")", $response);
             }
 
-            $response = \json_decode($response->getBody(), true);
+            $response = \json_decode(yield $response->getBody(), true);
 
             if (isset($response["items"][0]["user_id"], $response["items"][0]["display_name"], $response["items"][0]["profile_image"], $response["items"][0]["user_type"])) {
                 throw new OAuthException("Invalid Stack Exchange response doesn't match API documentation.");

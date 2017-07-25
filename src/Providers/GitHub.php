@@ -33,7 +33,7 @@ class GitHub extends Provider {
                 throw new HttpException("GitHub API query failure, received bad HTTP status: " . $response->getStatus(), $response);
             }
 
-            $response = \json_decode($response->getBody(), true);
+            $response = \json_decode(yield $response->getBody(), true);
 
             if (!isset($response["id"], $response["login"], $response["avatar_url"])) {
                 throw new OAuthException("Invalid GitHub response doesn't match API documentation.");
