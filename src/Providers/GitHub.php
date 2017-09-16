@@ -16,8 +16,8 @@ class GitHub extends Provider {
     protected $authorizationUrl = "https://github.com/login/oauth/authorize";
     protected $accessTokenUrl = "https://github.com/login/oauth/access_token";
 
-    public function __construct(Client $http, string $redirectUrl, string $clientId, string $clientSecret) {
-        parent::__construct($http, $redirectUrl, $clientId, $clientSecret, "");
+    public function __construct(Client $http, string $redirectUrl, string $clientId, string $clientSecret, array $scopes = []) {
+        parent::__construct($http, $redirectUrl, $clientId, $clientSecret, \implode(" ", $scopes));
     }
 
     public function getIdentity(string $accessToken): Promise {
