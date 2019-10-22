@@ -53,6 +53,7 @@ abstract class Provider
             'scope' => $this->scope,
             'state' => $state,
             'redirect_uri' => $this->redirectUri,
+            'response_type' => 'code',
         ];
 
         return $this->authorizationUrl . '?' . \http_build_query($data);
@@ -62,6 +63,7 @@ abstract class Provider
     {
         return call(function () use ($code) {
             $form = new FormBody;
+            $form->addField('grant_type', 'authorization_code');
             $form->addField('redirect_uri', $this->redirectUri);
             $form->addField('client_id', $this->clientId);
             $form->addField('client_secret', $this->clientSecret);
@@ -74,10 +76,18 @@ abstract class Provider
             $response = yield $this->http->request($request);
             $body = yield $response->getBody()->buffer();
 
-            \parse_str($body, $data);
+            if (\strtok($response->getHeader('content-type'), ';') === 'application/json') {
+                $data = \json_decode($body, true, 5);
+
+                if (\json_last_error() !== \JSON_ERROR_NONE) {
+                    throw new OAuthException('Failed to decode JSON response: ' . $body);
+                }
+            } else {
+                \parse_str($body, $data);
+            }
 
             if (!isset($data['access_token'])) {
-                throw new OAuthException($data['error_description'] ?? $data['error'] ?? 'no access token provided');
+                throw new OAuthException($data['error_description'] ?? $data['error'] ?? ('No access token provided: ' . $body));
             }
 
             return $data['access_token'];
