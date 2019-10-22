@@ -15,6 +15,7 @@
         }
     },
     "require": {
+        "php": ">=7.1",
         "ext-json": "*",
         "amphp/http-client": "^4-rc"
     },
