@@ -1,6 +1,7 @@
 {
     "name": "kelunik/oauth",
     "type": "library",
+    "description": "OAuth client.",
     "license": "MIT",
     "authors": [
         {
@@ -14,9 +15,16 @@
         }
     },
     "require": {
-        "amphp/artax": "^3"
+        "ext-json": "*",
+        "amphp/http-client": "^4-rc"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^2.3"
+        "ext-pcntl": "*",
+        "friendsofphp/php-cs-fixer": "^2.3",
+        "amphp/php-cs-fixer-config": "dev-master",
+        "amphp/http-server": "^2-rc",
+        "amphp/http-server-session": "^2-rc",
+        "amphp/http-server-router": "^1.0",
+        "amphp/log": "^1.1"
     }
 }

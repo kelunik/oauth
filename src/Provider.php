@@ -2,14 +2,15 @@
 
 namespace Kelunik\OAuth;
 
-use Amp\Artax\Client;
-use Amp\Artax\FormBody;
-use Amp\Artax\Request;
-use Amp\Artax\Response as HttpResponse;
+use Amp\Http\Client\Body\FormBody;
+use Amp\Http\Client\Client;
+use Amp\Http\Client\Request;
+use Amp\Http\Client\Response;
 use Amp\Promise;
 use function Amp\call;
 
-abstract class Provider {
+abstract class Provider
+{
     /** @var Client */
     protected $http;
 
@@ -31,7 +32,13 @@ abstract class Provider {
     /** @var string */
     protected $scope;
 
-    public function __construct(Client $http, string $redirectUri, string $clientId, string $clientSecret, string $scope) {
+    public function __construct(
+        Client $http,
+        string $redirectUri,
+        string $clientId,
+        string $clientSecret,
+        string $scope
+    ) {
         $this->http = $http;
         $this->redirectUri = $redirectUri;
         $this->clientId = $clientId;
@@ -39,38 +46,41 @@ abstract class Provider {
         $this->scope = $scope;
     }
 
-    public function getAuthorizationUrl(string $state): string {
+    public function getAuthorizationUrl(string $state): string
+    {
         $data = [
-            "client_id" => $this->clientId,
-            "scope" => $this->scope,
-            "state" => $state,
-            "redirect_uri" => $this->redirectUri,
+            'client_id' => $this->clientId,
+            'scope' => $this->scope,
+            'state' => $state,
+            'redirect_uri' => $this->redirectUri,
         ];
 
-        return $this->authorizationUrl . "?" . http_build_query($data);
+        return $this->authorizationUrl . '?' . \http_build_query($data);
     }
 
-    public function exchangeAccessTokenForCode(string $code): Promise {
+    public function exchangeAccessTokenForCode(string $code): Promise
+    {
         return call(function () use ($code) {
             $form = new FormBody;
-            $form->addField("redirect_uri", $this->redirectUri);
-            $form->addField("client_id", $this->clientId);
-            $form->addField("client_secret", $this->clientSecret);
-            $form->addField("code", $code);
+            $form->addField('redirect_uri', $this->redirectUri);
+            $form->addField('client_id', $this->clientId);
+            $form->addField('client_secret', $this->clientSecret);
+            $form->addField('code', $code);
 
-            $request = (new Request($this->accessTokenUrl, "POST"))->withBody($form);
+            $request = new Request($this->accessTokenUrl, 'POST');
+            $request->setBody($form);
 
-            /** @var HttpResponse $response */
+            /** @var Response $response */
             $response = yield $this->http->request($request);
-            $body = yield $response->getBody();
+            $body = yield $response->getBody()->buffer();
 
-            parse_str($body, $data);
+            \parse_str($body, $data);
 
-            if (!isset($data["access_token"])) {
-                throw new OAuthException($data["error_description"] ?? $data["error"] ?? "no access token provided");
+            if (!isset($data['access_token'])) {
+                throw new OAuthException($data['error_description'] ?? $data['error'] ?? 'no access token provided');
             }
 
-            return $data["access_token"];
+            return $data['access_token'];
         });
     }
 

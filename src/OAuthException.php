@@ -2,7 +2,6 @@
 
 namespace Kelunik\OAuth;
 
-use Exception;
-
-class OAuthException extends Exception {
+class OAuthException extends \Exception
+{
 }

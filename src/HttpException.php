@@ -2,18 +2,21 @@
 
 namespace Kelunik\OAuth;
 
-use Amp\Artax\Response;
+use Amp\Http\Client\Response;
 
-class HttpException extends OAuthException {
+class HttpException extends OAuthException
+{
     private $response;
 
-    public function __construct($message = "", Response $response) {
-        parent::__construct($message, 0, null);
+    public function __construct(string $message, Response $response)
+    {
+        parent::__construct($message);
 
         $this->response = $response;
     }
 
-    public function getResponse(): Response {
+    public function getResponse(): Response
+    {
         return $this->response;
     }
 }

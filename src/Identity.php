@@ -2,14 +2,16 @@
 
 namespace Kelunik\OAuth;
 
-class Identity {
+class Identity
+{
     private $provider;
 
     private $id;
     private $name;
     private $avatar;
 
-    public function __construct(Provider $provider, string $id, string $name, string $avatar) {
+    public function __construct(Provider $provider, string $id, string $name, string $avatar)
+    {
         $this->provider = $provider;
 
         $this->id = $id;
@@ -17,19 +19,23 @@ class Identity {
         $this->avatar = $avatar;
     }
 
-    public function getProvider(): Provider {
+    final public function getProvider(): Provider
+    {
         return $this->provider;
     }
 
-    public function getId(): string {
+    final public function getId(): string
+    {
         return $this->id;
     }
 
-    public function getName(): string {
+    final public function getName(): string
+    {
         return $this->name;
     }
 
-    public function getAvatar(): string {
+    final public function getAvatar(): string
+    {
         return $this->avatar;
     }
 }
