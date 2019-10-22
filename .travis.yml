@@ -18,7 +18,6 @@ matrix:
 before_script:
   # --ignore-platform-reqs, because https://github.com/FriendsOfPHP/PHP-CS-Fixer/pull/2722
   - composer update -n --prefer-dist --ignore-platform-reqs
-  - composer require satooshi/php-coveralls dev-master --ignore-platform-reqs
 
 script:
   # Currently no tests: phpdbg -qrr vendor/bin/phpunit --coverage-text --coverage-clover build/logs/clover.xml
