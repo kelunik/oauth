@@ -17,7 +17,7 @@
     "require": {
         "php": ">=7.1",
         "ext-json": "*",
-        "amphp/http-client": "^4-rc"
+        "amphp/http-client": "^4.3"
     },
     "require-dev": {
         "ext-pcntl": "*",
