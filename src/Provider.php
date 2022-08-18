@@ -3,43 +3,33 @@
 namespace Kelunik\OAuth;
 
 use Amp\Http\Client\Body\FormBody;
-use Amp\Http\Client\Client;
+use Amp\Http\Client\HttpClient;
 use Amp\Http\Client\Request;
-use Amp\Http\Client\Response;
-use Amp\Promise;
-use function Amp\call;
 
 abstract class Provider
 {
-    /** @var Client */
-    protected $http;
+    protected HttpClient $http;
 
-    /** @var string */
-    protected $redirectUri;
+    protected string $redirectUri;
 
-    /** @var string */
-    protected $authorizationUrl;
+    protected string $authorizationUrl;
 
-    /** @var string */
-    protected $accessTokenUrl;
+    protected string $accessTokenUrl;
 
-    /** @var string */
-    protected $clientId;
+    protected string $clientId;
 
-    /** @var string */
-    protected $clientSecret;
+    protected string $clientSecret;
 
-    /** @var string */
-    protected $scope;
+    protected string $scope;
 
     public function __construct(
-        Client $http,
+        HttpClient $httpClient,
         string $redirectUri,
         string $clientId,
         string $clientSecret,
         string $scope
     ) {
-        $this->http = $http;
+        $this->http = $httpClient;
         $this->redirectUri = $redirectUri;
         $this->clientId = $clientId;
         $this->clientSecret = $clientSecret;
@@ -59,42 +49,39 @@ abstract class Provider
         return $this->authorizationUrl . '?' . \http_build_query($data);
     }
 
-    public function exchangeAccessTokenForCode(string $code): Promise
+    public function exchangeAccessTokenForCode(string $code): string
     {
-        return call(function () use ($code) {
-            $form = new FormBody;
-            $form->addField('grant_type', 'authorization_code');
-            $form->addField('redirect_uri', $this->redirectUri);
-            $form->addField('client_id', $this->clientId);
-            $form->addField('client_secret', $this->clientSecret);
-            $form->addField('code', $code);
+        $form = new FormBody;
+        $form->addField('grant_type', 'authorization_code');
+        $form->addField('redirect_uri', $this->redirectUri);
+        $form->addField('client_id', $this->clientId);
+        $form->addField('client_secret', $this->clientSecret);
+        $form->addField('code', $code);
 
-            $request = new Request($this->accessTokenUrl, 'POST');
-            $request->setBody($form);
+        $request = new Request($this->accessTokenUrl, 'POST');
+        $request->setBody($form);
 
-            /** @var Response $response */
-            $response = yield $this->http->request($request);
-            $body = yield $response->getBody()->buffer();
+        $response = $this->http->request($request);
+        $body = $response->getBody()->buffer();
 
-            if (\strtok($response->getHeader('content-type'), ';') === 'application/json') {
-                $data = \json_decode($body, true, 5);
+        if (\strtok($response->getHeader('content-type'), ';') === 'application/json') {
+            $data = \json_decode($body, true, 5);
 
-                if (\json_last_error() !== \JSON_ERROR_NONE) {
-                    throw new OAuthException('Failed to decode JSON response: ' . $body);
-                }
-            } else {
-                \parse_str($body, $data);
+            if (\json_last_error() !== \JSON_ERROR_NONE) {
+                throw new OAuthException('Failed to decode JSON response: ' . $body);
             }
+        } else {
+            \parse_str($body, $data);
+        }
 
-            if (!isset($data['access_token'])) {
-                throw new OAuthException($data['error_description'] ?? $data['error'] ?? ('No access token provided: ' . $body));
-            }
+        if (!isset($data['access_token'])) {
+            throw new OAuthException($data['error_description'] ?? $data['error'] ?? ('No access token provided: ' . $body));
+        }
 
-            return $data['access_token'];
-        });
+        return $data['access_token'];
     }
 
-    abstract public function getIdentity(string $accessToken): Promise;
+    abstract public function getIdentity(string $accessToken): Identity;
 
     abstract public function getInternalName(): string;
 

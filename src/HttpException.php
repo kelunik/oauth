@@ -6,7 +6,7 @@ use Amp\Http\Client\Response;
 
 class HttpException extends OAuthException
 {
-    private $response;
+    private Response $response;
 
     public function __construct(string $message, Response $response)
     {

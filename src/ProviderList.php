@@ -4,7 +4,7 @@ namespace Kelunik\OAuth;
 
 class ProviderList implements \IteratorAggregate
 {
-    private $providers;
+    private array $providers;
 
     public function __construct()
     {
@@ -16,7 +16,7 @@ class ProviderList implements \IteratorAggregate
      *
      * @throws OAuthException If the provider name is already registered
      */
-    public function addProvider(Provider $provider)
+    public function addProvider(Provider $provider): void
     {
         $name = $provider->getInternalName();
 

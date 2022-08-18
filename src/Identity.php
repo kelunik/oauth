@@ -4,11 +4,11 @@ namespace Kelunik\OAuth;
 
 class Identity
 {
-    private $provider;
+    private Provider $provider;
 
-    private $id;
-    private $name;
-    private $avatar;
+    private string $id;
+    private string $name;
+    private string $avatar;
 
     public function __construct(Provider $provider, string $id, string $name, string $avatar)
     {
