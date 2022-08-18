@@ -1,31 +1,36 @@
 {
-    "name": "kelunik/oauth",
-    "type": "library",
-    "description": "OAuth client.",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Niklas Keller",
-            "email": "me@kelunik.com"
-        }
-    ],
-    "autoload": {
-        "psr-4": {
-            "Kelunik\\OAuth\\": "src"
-        }
-    },
+  "name": "kelunik/oauth",
+  "type": "library",
+  "description": "OAuth client.",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Niklas Keller",
+      "email": "me@kelunik.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Kelunik\\OAuth\\": "src"
+    }
+  },
   "minimum-stability": "dev",
   "prefer-stable": true,
   "require": {
-        "php": ">=8.1",
-        "amphp/http-client": "^5"
-    },
-    "require-dev": {
-        "ext-pcntl": "*",
-        "amphp/php-cs-fixer-config": "^2",
-        "amphp/http-server": "^3",
-        "amphp/http-server-session": "^3",
-        "amphp/http-server-router": "^2",
-        "amphp/log": "^2"
+    "php": ">=8.1",
+    "amphp/http-client": "^5"
+  },
+  "require-dev": {
+    "ext-pcntl": "*",
+    "amphp/php-cs-fixer-config": "^2",
+    "amphp/http-server": "^3",
+    "amphp/http-server-session": "^3",
+    "amphp/http-server-router": "^2",
+    "amphp/log": "^2"
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "1.x-dev"
     }
+  }
 }
